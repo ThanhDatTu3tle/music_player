@@ -3,19 +3,23 @@
 var songsApi = 'http://localhost:3000/songs';
 
 // define currentIndex and object currentSong in order to get information of the current song
-var currentIndex = 0;
+localStorage.setItem('index', '0');
+var currentIndex = localStorage.getItem('index');;
 var currentSong = {};
 
 // define isPLaying variable
 var isPlaying = false;
 
 // call API then get the data
-function getSongs(renderSongs, getCurrentSong) {
+function getSongs(getCurrentSong, renderSongs, nextSong) {
     fetch(songsApi)
         .then(function(response) {
             return response.json();
         })
-        .then(renderSongs, getCurrentSong)
+        .then(renderSongs)
+        .then(getCurrentSong)
+        .then(nextSong)
+        .then(handleEvents)
 
 };
 
@@ -27,6 +31,9 @@ const cdThumb = $('.cd-thumb');
 const audio = $('#audio');
 const playBtn = $('.btn-toggle-play');
 const player = $('.player');
+const progress = $('#progress');
+const nextBtn = $('.btn-next');
+const prevBtn = $('.btn-prev');
 
 // function start
 function start() {
@@ -34,20 +41,23 @@ function start() {
     // Listen / handle events (DOM events)
     handleEvents();
 
-    // Load information of the first song 
-    // loadCurrentSong();
-
     // Render UI
     getSongs(renderSongs);
 
     // Render current song
     getSongs(getCurrentSong);
-};
 
+    // Render next song
+    getSongs(nextSong);
+
+    // handleEvents
+    getSongs(handleEvents);
+
+};
 start();
 
 // function handle Events
-function handleEvents() {
+function handleEvents(songs) {
     const cd = $('.cd');
     const cdWidth = cd.offsetWidth;
 
@@ -68,30 +78,48 @@ function handleEvents() {
             isPlaying = false;
             audio.pause();
             player.classList.remove('playing');
+            cdThumbAnimate.pause();
         } else {
             isPlaying = true;
             audio.play();
             player.classList.add('playing');
+            cdThumbAnimate.play();
         } 
     };
+
+    // when process of the song changing
+    audio.ontimeupdate = function() {
+        // audio.duration = số giây của bài hát
+        // audio.currentTime = số giây hiện tại của bài hát khi bài hát đang phát
+        if (audio.duration) {
+            const progressPercent = Math.floor(audio.currentTime / audio.duration * 100);
+            progress.value = progressPercent;
+        }
+    }
+
+    // handle rewind the song
+    progress.onchange = function(e) {
+        const seekTime = audio.duration / 100 * e.target.value;
+        audio.currentTime = seekTime;
+    }
+
+    //handle cd roll/stop
+    const cdThumbAnimate = cdThumb.animate([
+        { transform: 'rotate(360deg)' }
+    ], {
+        duration: 10000, //10 giây
+        interations: Infinity
+    });
+    cdThumbAnimate.pause(); // mới zo hong cho quay
+
+    // handle next/prev Song
+    nextBtn.onclick = function() {
+        nextSong();
+    }
 };
-
-// function loadCurrentSong
-// function loadCurrentSong(songs) {
-//     const heading = $('header h2');
-//     const cdThumb = $('.cd-thumb');
-//     const audio = $('#audio');
-
-//     heading.textContent = this.currentSong.name;
-//     // cdThumb.style.backgroundImage = `url('${this.currentSong.image}')`;
-//     // audio.src = this.currentSong.path;
-
-//     console.log(heading, cdThumb, audio);
-// };
 
 // function renderUI
 function renderSongs(songs) {
-    const $ = document.querySelector.bind(document);
 
     const htmls = songs.map(song => {
         return `
@@ -114,15 +142,28 @@ function renderSongs(songs) {
 
 // function getCurrentSong
 function getCurrentSong(songs) {
-    var currentSong = songs[this.currentIndex];
-
+    var currentSong = songs[currentIndex];
     // console.log(currentSong);
 
     heading.textContent = currentSong.name;
-    // cdThumb.style.backgroundImage = `url('${this.currentSong.image}')`;
-    // audio.src = this.currentSong.path;
+    cdThumb.style.backgroundImage = `url('${currentSong.image}')`;
+    audio.src = currentSong.path;
+};
 
-    console.log(heading, cdThumb, audio);
-    
-    return currentSong;
+// function nextSong
+function nextSong(songs) {
+  
+    var currentSong = songs[currentIndex];
+
+    var songsLength = songs.length;
+
+    console.log('Current song: ',  currentSong);
+    console.log('Index: ', currentIndex)
+    if (currentIndex >= songsLength) {
+        currentSong = 0;
+    }
+
+    getCurrentSong(songs);
+
+    // console.log('Current index: ', currentIndex);
 };

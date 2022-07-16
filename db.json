@@ -3,44 +3,16 @@
     {
       "id": 1,
       "name": "Ra khơi cùng Đức Kiô",
-      "singer": "V.A",
-      "path": "path",
-      "image": "image"
+      "singer": "Uyên Nguyên",
+      "path": "assets/music/RaKhoiCungDucKito.mp3",
+      "image": "assets/img/RaKhoiCungDucKito.jpeg"
     },
     {
       "id": 2,
       "name": "Ấu nhi ca",
       "singer": "Hạnh Nhi, Trúc Ngân",
-      "path": "path",
-      "image": "image"
-    },
-    {
-      "name": "Chicken dance",
-      "singer": "V.A",
-      "path": "path",
-      "image": "image",
-      "id": 3
-    },
-    {
-      "name": "Có Chúa song hành",
-      "singer": "V.A",
-      "path": "path",
-      "image": "image",
-      "id": 4
-    },
-    {
-      "name": "Bài ca Thiếu nhi Thánh Thể",
-      "singer": "V.A",
-      "path": "path",
-      "image": "image",
-      "id": 5
-    },
-    {
-      "name": "Hiến tế 22",
-      "singer": "V.A",
-      "path": "path",
-      "image": "image",
-      "id": 6
+      "path": "assets/music/AuNhiCa.mp3",
+      "image": "assets/img/AuNhiCa.jpeg"
     }
   ]
 }
