@@ -3,15 +3,14 @@
 var songsApi = 'http://localhost:3000/songs';
 
 // define currentIndex and object currentSong in order to get information of the current song
-localStorage.setItem('index', '0');
-var currentIndex = localStorage.getItem('index');;
+var currentIndex = 0;
 var currentSong = {};
 
 // define isPLaying variable
 var isPlaying = false;
 
 // call API then get the data
-function getSongs(getCurrentSong, renderSongs, nextSong) {
+function getSongs(getCurrentSong, renderSongs, nextSong, handleNextSong, prevSong, handlePrevSong) {
     fetch(songsApi)
         .then(function(response) {
             return response.json();
@@ -19,8 +18,7 @@ function getSongs(getCurrentSong, renderSongs, nextSong) {
         .then(renderSongs)
         .then(getCurrentSong)
         .then(nextSong)
-        .then(handleEvents)
-
+        .then(handleNextSong)
 };
 
 // define some constant
@@ -38,26 +36,41 @@ const prevBtn = $('.btn-prev');
 // function start
 function start() {
 
-    // Listen / handle events (DOM events)
-    handleEvents();
-
     // Render UI
     getSongs(renderSongs);
 
     // Render current song
     getSongs(getCurrentSong);
 
+    // handle NextSong
+    getSongs(handleNextSong);
+
     // Render next song
     getSongs(nextSong);
 
-    // handleEvents
-    getSongs(handleEvents);
+    // handle PrevSong
+    getSongs(handlePrevSong);
+
+    // Render prev song
+    getSongs(prevSong);
+
+    // Listen / handle events (DOM events)
+    handleEvents();
 
 };
 start();
 
+//handle cd roll/stop
+const cdThumbAnimate = cdThumb.animate([
+    { transform: 'rotate(360deg)' }
+], {
+    duration: 10000, //10 giây
+    iterations: 1 / 0
+});
+cdThumbAnimate.pause(); // mới zo hong cho quay
+
 // function handle Events
-function handleEvents(songs) {
+function handleEvents() {
     const cd = $('.cd');
     const cdWidth = cd.offsetWidth;
 
@@ -103,19 +116,6 @@ function handleEvents(songs) {
         audio.currentTime = seekTime;
     }
 
-    //handle cd roll/stop
-    const cdThumbAnimate = cdThumb.animate([
-        { transform: 'rotate(360deg)' }
-    ], {
-        duration: 10000, //10 giây
-        interations: Infinity
-    });
-    cdThumbAnimate.pause(); // mới zo hong cho quay
-
-    // handle next/prev Song
-    nextBtn.onclick = function() {
-        nextSong();
-    }
 };
 
 // function renderUI
@@ -143,27 +143,49 @@ function renderSongs(songs) {
 // function getCurrentSong
 function getCurrentSong(songs) {
     var currentSong = songs[currentIndex];
-    // console.log(currentSong);
-
     heading.textContent = currentSong.name;
     cdThumb.style.backgroundImage = `url('${currentSong.image}')`;
     audio.src = currentSong.path;
 };
 
+function handleNextSong(songs) {
+    nextBtn.onclick = function() {
+        nextSong(songs);
+        if (isPlaying) {
+            audio.play()
+        }
+    }
+};
+
+function handlePrevSong(songs) {
+    prevBtn.onclick = function() {
+        prevSong(songs);
+        if (isPlaying) {
+            audio.play()
+        }
+    }
+};
+
 // function nextSong
 function nextSong(songs) {
-  
-    var currentSong = songs[currentIndex];
+    var keys = Object.keys(songs);
+    currentIndex++;
 
-    var songsLength = songs.length;
-
-    console.log('Current song: ',  currentSong);
-    console.log('Index: ', currentIndex)
-    if (currentIndex >= songsLength) {
-        currentSong = 0;
+    if (currentIndex >= keys.length) {
+        currentIndex = 0;
     }
 
     getCurrentSong(songs);
+};
 
-    // console.log('Current index: ', currentIndex);
+// function prevSong
+function prevSong(songs) {
+    var keys = Object.keys(songs);
+    currentIndex--;
+
+    if (currentIndex < 0) {
+        currentIndex = keys.length - 1;
+    }
+
+    getCurrentSong(songs);
 };

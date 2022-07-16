@@ -13,6 +13,34 @@
       "singer": "Hạnh Nhi, Trúc Ngân",
       "path": "assets/music/AuNhiCa.mp3",
       "image": "assets/img/AuNhiCa.jpeg"
+    },
+    {
+      "name": "Chào lửa thiêng",
+      "singer": "Hạnh Nhi, Trúc Ngân",
+      "path": "assets/music/ChaoLuaThieng.mp3",
+      "image": "assets/img/ChaoLuaThieng.jpeg",
+      "id": 3
+    },
+    {
+      "name": "Gieo mầm tin yêu",
+      "singer": "Lửa Hồng",
+      "path": "assets/music/GieoMamTinYeu.mp3",
+      "image": "assets/img/GieoMamTinYeu.jpeg",
+      "id": 4
+    },
+    {
+      "name": "Hiến tế 22",
+      "singer": "Gia Ân",
+      "path": "assets/music/HienTe22.mp3",
+      "image": "assets/img/HienTe22.jpeg",
+      "id": 5
+    },
+    {
+      "name": "Trong Giêsu chúng ta là tấm bánh",
+      "singer": "Nhóm Lửa Hồng",
+      "path": "assets/music/TrongGiesuChungTaLaTamBanh.mp3",
+      "image": "assets/img/TrongGiesuChungTaLaTamBanh.jpeg",
+      "id": 6
     }
   ]
 }
