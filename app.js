@@ -9,8 +9,19 @@ var currentSong = {};
 // define isPLaying variable
 var isPlaying = false;
 
+// define isRandom variable
+var isRandom = false;
+
 // call API then get the data
-function getSongs(getCurrentSong, renderSongs, nextSong, handleNextSong, prevSong, handlePrevSong) {
+function getSongs(
+    getCurrentSong, 
+    renderSongs, 
+    nextSong, 
+    handleNextSong, 
+    prevSong, 
+    handlePrevSong, 
+    playRandomSong, 
+) {
     fetch(songsApi)
         .then(function(response) {
             return response.json();
@@ -19,6 +30,9 @@ function getSongs(getCurrentSong, renderSongs, nextSong, handleNextSong, prevSon
         .then(getCurrentSong)
         .then(nextSong)
         .then(handleNextSong)
+        .then(prevSong)
+        .then(handlePrevSong)
+        .then(playRandomSong)
 };
 
 // define some constant
@@ -32,6 +46,7 @@ const player = $('.player');
 const progress = $('#progress');
 const nextBtn = $('.btn-next');
 const prevBtn = $('.btn-prev');
+const randomBtn = $('.btn-random');
 
 // function start
 function start() {
@@ -54,9 +69,14 @@ function start() {
     // Render prev song
     getSongs(prevSong);
 
+    // Render random song
+    getSongs(playRandomSong);
+
+    // handle random song
+    handlePlayRandomSong();
+
     // Listen / handle events (DOM events)
     handleEvents();
-
 };
 start();
 
@@ -115,12 +135,10 @@ function handleEvents() {
         const seekTime = audio.duration / 100 * e.target.value;
         audio.currentTime = seekTime;
     }
-
 };
 
 // function renderUI
 function renderSongs(songs) {
-
     const htmls = songs.map(song => {
         return `
             <div class="song">
@@ -136,7 +154,6 @@ function renderSongs(songs) {
             </div>
         `
     })
-
     $('.playlist').innerHTML = htmls.join('');
 };
 
@@ -148,22 +165,46 @@ function getCurrentSong(songs) {
     audio.src = currentSong.path;
 };
 
+// function handleNextSong
 function handleNextSong(songs) {
     nextBtn.onclick = function() {
-        nextSong(songs);
-        if (isPlaying) {
-            audio.play()
+        if (isRandom) {
+            playRandomSong(songs);
+            if (isPlaying) {
+                audio.play()
+            }
+        } else {
+            nextSong(songs);
+            if (isPlaying) {
+                audio.play()
+            }
         }
     }
 };
 
+// function handlePrevSong
 function handlePrevSong(songs) {
     prevBtn.onclick = function() {
-        prevSong(songs);
-        if (isPlaying) {
-            audio.play()
+        if (isRandom) {
+            playRandomSong(songs);
+            if (isPlaying) {
+                audio.play()
+            }
+        } else {
+            prevSong(songs);
+            if (isPlaying) {
+                audio.play()
+            }
         }
     }
+};
+
+// function handlePLayRandomSong
+function handlePlayRandomSong() {
+    randomBtn.onclick = function() {
+        isRandom = !isRandom;
+        randomBtn.classList.toggle('active', isRandom);
+    };
 };
 
 // function nextSong
@@ -180,6 +221,7 @@ function nextSong(songs) {
 
 // function prevSong
 function prevSong(songs) {
+
     var keys = Object.keys(songs);
     currentIndex--;
 
@@ -187,5 +229,16 @@ function prevSong(songs) {
         currentIndex = keys.length - 1;
     }
 
+    getCurrentSong(songs);
+};
+
+// function playRandomSong
+function playRandomSong(songs) {
+    var keys = Object.keys(songs);
+    let newIndex;
+    do {
+        newIndex = Math.floor(Math.random() * keys.length);
+    } while (newIndex === currentIndex)
+    currentIndex = newIndex;
     getCurrentSong(songs);
 };
