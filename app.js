@@ -48,6 +48,19 @@ function getSongs(
 // define some constant
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
+
+const PLAYER_STORAGE_KEY = 'TU3TLE_PLAYER';
+var config = JSON.parse(localStorage.getItem(PLAYER_STORAGE_KEY)) || {};
+function setConfig(key, value) {
+    config[key] = value;
+    localStorage.setItem(PLAYER_STORAGE_KEY, JSON.stringify(config));
+}; 
+
+function loadConfig() {
+    isRandom = config.isRandom;
+    isRepeat = config.isRepeat;
+}
+
 const heading = $('header h2');
 const cdThumb = $('.cd-thumb');
 const audio = $('#audio');
@@ -63,6 +76,8 @@ const playList = $('.playlist');
 
 // function start
 function start() {
+    //
+    loadConfig();
 
     // Render UI
     getSongs(renderSongs);
@@ -261,6 +276,7 @@ function handlePrevSong(songs) {
 function handlePlayRandomSong() {
     randomBtn.onclick = function() {
         isRandom = !isRandom;
+        setConfig('isRandom', isRandom);
         randomBtn.classList.toggle('active', isRandom);
     };
 };
@@ -269,6 +285,7 @@ function handlePlayRandomSong() {
 function handleRepeatSong() {
     repeatBtn.onclick = function() {
         isRepeat = !isRepeat;
+        setConfig('isRepeat', isRepeat);
         repeatBtn.classList.toggle('active', isRepeat);
     };
 };
@@ -281,7 +298,7 @@ function handleClickSong(songs) {
         const optionNode = e.target.closest('.option');
         if (songNode || !optionNode) {
             if (songNode) {
-                currentIndex = songNode.dataset.index;
+                currentIndex = Number(songNode.dataset.index);
                 getCurrentSong(songs);
                 renderSongs(songs);
                 audio.pause();
