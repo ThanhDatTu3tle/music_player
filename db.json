@@ -5,42 +5,64 @@
       "name": "Ra khơi cùng Đức Kiô",
       "singer": "Uyên Nguyên",
       "path": "assets/music/RaKhoiCungDucKito.mp3",
-      "image": "assets/img/RaKhoiCungDucKito.jpeg"
+      "image": "assets/img/RaKhoiCungDucKito.jpeg",
+      "status": "active"
     },
     {
       "id": 2,
       "name": "Ấu nhi ca",
       "singer": "Hạnh Nhi, Trúc Ngân",
       "path": "assets/music/AuNhiCa.mp3",
-      "image": "assets/img/AuNhiCa.jpeg"
+      "image": "assets/img/AuNhiCa.jpeg",
+      "status": "active"
     },
     {
       "name": "Chào lửa thiêng",
       "singer": "Hạnh Nhi, Trúc Ngân",
       "path": "assets/music/ChaoLuaThieng.mp3",
       "image": "assets/img/ChaoLuaThieng.jpeg",
-      "id": 3
+      "id": 3,
+      "status": "active"
     },
     {
       "name": "Gieo mầm tin yêu",
       "singer": "Lửa Hồng",
       "path": "assets/music/GieoMamTinYeu.mp3",
       "image": "assets/img/GieoMamTinYeu.jpeg",
-      "id": 4
+      "id": 4,
+      "status": "active"
     },
     {
       "name": "Hiến tế 22",
       "singer": "Gia Ân",
       "path": "assets/music/HienTe22.mp3",
       "image": "assets/img/HienTe22.jpeg",
-      "id": 5
+      "id": 5,
+      "status": "active"
     },
     {
       "name": "Trong Giêsu chúng ta là tấm bánh",
       "singer": "Nhóm Lửa Hồng",
       "path": "assets/music/TrongGiesuChungTaLaTamBanh.mp3",
       "image": "assets/img/TrongGiesuChungTaLaTamBanh.jpeg",
-      "id": 6
+      "id": 6,
+      "status": "active"
+    },
+    {
+      "name": "Nối kết tình thân",
+      "singer": "Uyên Nguyên",
+      "path": "assets/music/NoiKetTinhThan.mp3",
+      "image": "assets/img/NoiKetTinhThan.jpeg",
+      "status": "active",
+      "id": 7
+    },
+    {
+      "name": "Đừng sợ",
+      "singer": "Nhóm Lửa Hồng",
+      "path": "assets/music/DungSo.mp3",
+      "image": "assets/img/DungSo.jpeg",
+      "status": "active",
+      "id": 8
     }
   ]
 }
