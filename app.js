@@ -28,7 +28,8 @@ function getSongs(
     handlePrevSong, 
     handleActiveSong,
     scrollToActiveSong,
-    handleClickSong
+    handleClickSong,
+    loadConfig
 ) {
     fetch(songsApi)
         .then(function(response) {
@@ -77,7 +78,9 @@ const playList = $('.playlist');
 // function start
 function start() {
     //
+    // setConfig();
     loadConfig();
+    getSongs(loadConfig);
 
     // Render UI
     getSongs(renderSongs);
